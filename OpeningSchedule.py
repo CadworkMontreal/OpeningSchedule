@@ -5,7 +5,7 @@
 # file that should have been included as part of this package.
 
 # import required controllers
-import attribute_controller, element_controller, geometry_controller, list_controller, menu_controller, shop_drawing_controller, utility_controller
+import cadwork, attribute_controller, element_controller, geometry_controller, list_controller, menu_controller, shop_drawing_controller, utility_controller
 
 # get active elements
 active_elements = element_controller.get_active_identifiable_element_ids()
@@ -38,6 +38,13 @@ for opening in active_openings:
   container = element_controller.create_auto_container_from_standard_with_reference(single_opening_list, opening_name, selected_container_name, opening)
   created_containers.append(container)
 
+  single_container_list = [container]
+
+  yl = geometry_controller.get_yl(opening)
+
+  if yl.z > 0:
+    geometry_controller.rotate_length_axis_180(single_container_list)
+
   filtered_content = []
 
   for item in container_content:
@@ -57,8 +64,6 @@ for opening in active_openings:
   ref_length = ref_length - 20
   ref_width = ref_width - 20
   ref_height = ref_height - 20
-
-  single_container_list = [container]
 
   geometry_controller.set_length_real(single_container_list, ref_length)
   geometry_controller.set_width_real(single_container_list, ref_width)
